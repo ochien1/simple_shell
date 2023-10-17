@@ -81,7 +81,7 @@ int print_alias(list_t *node)
 }
 
 /**
- * _myalias - man alias 
+ * _myalias - man alias
  * @info: struct with potential arguments. Used to maintain
  *          a constant function prototype.
  *  Return: 0
