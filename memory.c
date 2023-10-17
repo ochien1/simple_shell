@@ -1,12 +1,13 @@
-#include "shell.h"
+#include <stdlib.h>
+#include <stddef.h>
 
 /**
- * bfree - frees memory allocated to ptr and NULLs it
- * @ptr: destination of the pointer to free
+ * freeAndNull - frees memory allocated to ptr and sets it to NULL
+ * @ptr: pointer to the memory to be freed
  *
  * Return: 1 if freed, otherwise 0.
  */
-int bfree(void **ptr)
+int freeAndNull(void **ptr)
 {
 	if (ptr && *ptr)
 	{

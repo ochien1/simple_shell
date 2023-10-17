@@ -1,72 +1,73 @@
 #include "shell.h"
 
 /**
- * is_chain - validates a char in buffer is a chain delimeter
+ * is_chain - validates a char in buffer is a chain delimiter
  * @info: the parameter struct
- * @buf: the char buffer
- * @p: address of current position in buf
+ * @buffer: the char buffer
+ * @position: address of current position in buffer
  *
- * Return: 1 if chain delimeter, 0 otherwise
+ * Return: 1 if chain delimiter, 0 otherwise
  */
-int is_chain(info_t *info, char *buf, size_t *p)
+int is_chain(info_t *info, char *buffer, size_t *position)
 {
-	size_t j = *p;
+	size_t j = *position;
 
-	if (buf[j] == '|' && buf[j + 1] == '|')
+	if (buffer[j] == '|' && buffer[j + 1] == '|')
 	{
-		buf[j] = 0;
+		buffer[j] = 0;
 		j++;
 		info->cmd_buf_type = CMD_OR;
 	}
-	else if (buf[j] == '&' && buf[j + 1] == '&')
+	else if (buffer[j] == '&' && buffer[j + 1] == '&')
 	{
-		buf[j] = 0;
+		buffer[j] = 0;
 		j++;
 		info->cmd_buf_type = CMD_AND;
 	}
-	else if (buf[j] == ';') /* found end of this command */
+	else if (buffer[j] == ';') /* found end of this command */
 	{
-		buf[j] = 0; /* replace semicolon with null */
+		buffer[j] = 0; /* replace semicolon with null */
 		info->cmd_buf_type = CMD_CHAIN;
 	}
 	else
 		return (0);
-	*p = j;
+	*position = j;
 	return (1);
 }
 
 /**
  * check_chain - determines if chaining should continue chaining
  * @info: the parameter struct
- * @buf: the char buffer
- * @p: address of current position in buf
- * @i: starting position in buf
- * @len: length of buf
+ * @buffer: the char buffer
+ * @position: address of current position in buffer
+ * @start: starting position in buffer
+ * @length: length of buffer
  *
  * Return: Void
  */
-void check_chain(info_t *info, char *buf, size_t *p, size_t i, size_t len)
+void check_chain(info_t *info, char *buffer, size_t *position,
+		size_t start, size_t length)
 {
-	size_t j = *p;
+	size_t j = *position;
 
 	if (info->cmd_buf_type == CMD_AND)
 	{
 		if (info->status)
 		{
-			buf[i] = 0;
-			j = len;
+			buffer[start] = 0;
+			j = length;
 		}
 	}
 	if (info->cmd_buf_type == CMD_OR)
 	{
 		if (!info->status)
 		{
-			buf[i] = 0;
-			j = len;
+			buffer[start] = 0;
+			j = length;
 		}
 	}
 
-	*p = j;
+	*position = j;
 }
 
 /**
@@ -117,24 +118,23 @@ int replace_vars(info_t *info)
 		if (!_strcmp(info->argv[i], "$?"))
 		{
 			replace_string(&(info->argv[i]),
-					_strdup(convert_number(info->status, 10, 0)));
+						   _strdup(convert_number(info->status, 10, 0)));
 			continue;
 		}
 		if (!_strcmp(info->argv[i], "$$"))
 		{
 			replace_string(&(info->argv[i]),
-					_strdup(convert_number(getpid(), 10, 0)));
+						   _strdup(convert_number(getpid(), 10, 0)));
 			continue;
 		}
 		node = node_starts_with(info->env, &info->argv[i][1], '=');
 		if (node)
 		{
 			replace_string(&(info->argv[i]),
-					_strdup(_strchr(node->str, '=') + 1));
+						   _strdup(_strchr(node->str, '=') + 1));
 			continue;
 		}
 		replace_string(&info->argv[i], _strdup(""));
-
 	}
 	return (0);
 }

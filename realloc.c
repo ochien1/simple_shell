@@ -1,13 +1,13 @@
 #include "shell.h"
 
 /**
- * _memset - sets the block memory to a specified  value
+ * _memset_custom - sets the block memory to a specified value
  * @s: the memory pointer
  * @b: the byte to set *s with
- * @n: the amount of bytes to be sett
+ * @n: the amount of bytes to be set
  * Return: (s) memory area s's pointer
  */
-char *_memset(char *s, char b, unsigned int n)
+char *_memset_custom(char *s, char b, unsigned int n)
 {
 	unsigned int i;
 
@@ -17,10 +17,10 @@ char *_memset(char *s, char b, unsigned int n)
 }
 
 /**
- * ffree - makes memory a string of reusable
+ * ffree_custom - makes memory a string of reusable
  * @pp: string of strings
  */
-void ffree(char **pp)
+void ffree_custom(char **pp)
 {
 	char **a = pp;
 
@@ -32,14 +32,13 @@ void ffree(char **pp)
 }
 
 /**
- * _realloc - resizes a block of memory
+ * _realloc_custom - resizes a block of memory
  * @ptr: pointer to previous malloc'ated memory
  * @old_size: byte size of previous block
  * @new_size: byte size of new block
- *
- * Return: pointer to the ol'block nameen.
+ * Return: pointer to the old block nameen.
  */
-void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
+void *_realloc_custom(void *ptr, unsigned int old_size, unsigned int new_size)
 {
 	char *p;
 

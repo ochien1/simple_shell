@@ -11,7 +11,6 @@
 #include <limits.h>
 #include <fcntl.h>
 #include <errno.h>
-
 /*  read/write buffers */
 #define READ_BUF_SIZE 1024
 #define WRITE_BUF_SIZE 1024
@@ -111,16 +110,19 @@ typedef struct builtin
 } builtin_table;
 
 
-/* shloop.c */
+/* shell_loop.c */
 int hsh(info_t *, char **);
 int find_builtin(info_t *);
 void find_cmd(info_t *);
 void fork_cmd(info_t *);
+int hsh(info_t *info, char **av);
+int find_builtin(info_t *info);
+void find_cmd(info_t *info);
+void fork_cmd(info_t *info);
+char *find_path(info_t *info, char *pathstr, char *cmd);
+int is_cmd(info_t *info, char *path);
 
-/* parser.c */
-int is_cmd(info_t *, char *);
-char *dup_chars(char *, int, int);
-char *find_path(info_t *, char *, char *);
+/* parser.c*/
 
 /* loophsh.c */
 int loophsh(char **);
@@ -132,6 +134,10 @@ int _putfd(char c, int fd);
 int _putsfd(char *str, int fd);
 
 /* string.c */
+int _strlen_custom(char *);
+int _strcmp_custom(char *, char *);
+char *starts_with_custom(const char *, const char *);
+char *_strcat_custom(char *, char *);
 int _strlen(char *);
 int _strcmp(char *, char *);
 char *starts_with(const char *, const char *);
@@ -142,6 +148,15 @@ char *_strcpy(char *, char *);
 char *_strdup(const char *);
 void _puts(char *);
 int _putchar(char);
+char *_strcpy(char *, char *);
+char *_strdup(const char *);
+void _puts(char *);
+int _putchar(char);
+int _putchar_custom(char character);
+char *_strcpy(char *dest, char *src);
+char *_strdup(const char *str);
+void _puts(char *str);
+int _putchar(char e);
 
 /* exits.c */
 char *_strncpy(char *, char *, int);
@@ -151,14 +166,19 @@ char *_strchr(char *, char);
 /* tokenizer.c */
 char **strtow(char *, char *);
 char **strtow2(char *, char);
+char **strtow(char *str, char *delim);
 
 /* realloc.c */
 char *_memset(char *, char, unsigned int);
 void ffree(char **);
 void *_realloc(void *, unsigned int, unsigned int);
+char *_memset_custom(char *s, char b, unsigned int n);
+void ffree_custom(char **pp);
+void *_realloc_custom(void *ptr, unsigned int old_size, unsigned int new_size);
 
 /* memory.c */
 int bfree(void **);
+int freeAndNull(void **ptr);
 
 /* atoi.c */
 int interactive(info_t *);
@@ -219,6 +239,11 @@ int delete_node_at_index(list_t **, unsigned int);
 void free_list(list_t **);
 
 /* lists1.c */
+size_t list_length(const list_t *head);
+char **list_to_strings(list_t *head);
+size_t print_list(const list_t *head);
+list_t *find_node_starts_with(list_t *head, char *prefix, char e);
+ssize_t get_node_index(list_t *head, list_t *node);
 size_t list_len(const list_t *);
 char **list_to_strings(list_t *);
 size_t print_list(const list_t *);

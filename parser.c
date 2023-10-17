@@ -1,86 +1,88 @@
 #include "shell.h"
 
 /**
- * is_cmd - checks whether a file is executable
- * @info: is info struct
- * @path: string parameters
- *
- * Return: 1 if true, 0 otherwise
- */
-int is_cmd(info_t *info, char *path)
+* is_executable - checks whether a file is executable
+* @information: info struct
+* @filePath: string representing file path
+*
+* Return: 1 if true, 0 otherwise
+*/
+int is_executable(info_t *information, char *filePath)
 {
-	struct stat st;
+struct stat st;
 
-	(void)info;
-	if (!path || stat(path, &st))
-		return (0);
+(void)information;
+if (!filePath || stat(filePath, &st))
+return (0);
 
-	if (st.st_mode & S_IFREG)
-	{
-		return (1);
-	}
-	return (0);
+if (st.st_mode & S_IFREG && st.st_mode & S_IXUSR)
+{
+return (1);
+}
+return (0);
 }
 
 /**
- * dup_chars - makes a copy of the characters
- * @pathstr: PATH string
- * @start: the source index
- * @stop: the destination index
- *
- * Return: pointer to new buffer
- */
-char *dup_chars(char *pathstr, int start, int stop)
+* copy_chars - makes a copy of characters from start to stop
+* @source: source string
+* @start: the source index
+* @stop: the destination index
+*
+* Return: pointer to new buffer
+*/
+char *copy_chars(char *source, int start, int stop)
 {
-	static char buf[1024];
-	int i = 0, k = 0;
+static char buffer[1024];
+int index = 0, k = 0;
 
-	for (k = 0, i = start; i < stop; i++)
-		if (pathstr[i] != ':')
-			buf[k++] = pathstr[i];
-	buf[k] = 0;
-	return (buf);
+for (k = 0, index = start; index < stop; index++)
+if (source[index] != ':')
+buffer[k++] = source[index];
+buffer[k] = 0;
+return (buffer);
 }
 
 /**
- * find_path - serches for the full path cmd
- * @info: info struct pointer
- * @pathstr: string representing PATH env variable
- * @cmd: the cmd to find
- *
- * Return: full path of cmd if found or NULL
- */
-char *find_path(info_t *info, char *pathstr, char *cmd)
+* find_full_path - searches for the full path of command
+* @information: info struct pointer
+* @pathString: string representing PATH env variable
+* @command: the command to find
+*
+* Return: full path of command if found or NULL
+*/
+char *find_full_path(info_t *information, char *pathString, char *command)
 {
-	int i = 0, curr_pos = 0;
-	char *path;
+int index = 0, curr_pos = 0;
+char *fullPath;
 
-	if (!pathstr)
-		return (NULL);
-	if ((_strlen(cmd) > 2) && starts_with(cmd, "./"))
-	{
-		if (is_cmd(info, cmd))
-			return (cmd);
-	}
-	while (1)
-	{
-		if (!pathstr[i] || pathstr[i] == ':')
-		{
-			path = dup_chars(pathstr, curr_pos, i);
-			if (!*path)
-				_strcat(path, cmd);
-			else
-			{
-				_strcat(path, "/");
-				_strcat(path, cmd);
-			}
-			if (is_cmd(info, path))
-				return (path);
-			if (!pathstr[i])
-				break;
-			curr_pos = i;
-		}
-		i++;
-	}
-	return (NULL);
+if (!pathString)
+return (NULL);
+
+if ((_strlen(command) > 2) && starts_with(command, "./"))
+{
+if (is_executable(information, command))
+return (command);
+}
+
+while (1)
+{
+if (!pathString[index] || pathString[index] == ':')
+{
+fullPath = copy_chars(pathString, curr_pos, index);
+if (!*fullPath)
+_strcat(fullPath, command);
+else
+{
+_strcat(fullPath, "/");
+_strcat(fullPath, command);
+}
+if (is_executable(information, fullPath))
+return (fullPath);
+if (!pathString[index])
+break;
+curr_pos = index;
+}
+index++;
+}
+return (NULL);
 }
