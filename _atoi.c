@@ -1,10 +1,10 @@
 #include "shell.h"
 
 /**
- * interactive - returns true if shell is interactive mode
- * @info: the struct address
+ * interactive - tif sheell interactive true
+ * @info: thee struct addreess
  *
- * Return: 1 if interactive mode, 0 otherwise
+ * Return:  0 otherwise 1 in interactive mode,
  */
 int interactive(info_t *info)
 {
@@ -12,63 +12,63 @@ int interactive(info_t *info)
 }
 
 /**
- * is_delim - checks if character is a delimeter
- * @c: the char to check
- * @delim: delimeter string
- * Return: 1 if true, 0 if false
+ * is_delim - character delimeter checkers
+ * @q: char to be  check
+ * @delim: str delimeter
+ * Return: 0 if false 1 if true,
  */
-int is_delim(char c, char *delim)
+int is_delim(char q, char *delim)
 {
 	while (*delim)
-		if (*delim++ == c)
+		if (*delim++ == q)
 			return (1);
 	return (0);
 }
 
 /**
- *_isalpha - checks for alphabetic character
- *@c: a character to input
- *Return: 1 if c is alphabetic, 0 otherwise
+ *_isalpha - alphabetic char checker
+ *@q: char 2 input
+ *Return:  0 otherwise not1  q is alphabetic,
  */
 
-int _isalpha(int c)
+int _isalpha(int q)
 {
-	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
+	if ((q >= 'a' && q <= 'z') || (q >= 'A' && q <= 'Z'))
 		return (1);
 	else
 		return (0);
 }
 
 /**
- *_atoi - converting a string to an integer
- *@s: the string to be converted
- *Return: 0 if no numbers in string, converted number otherwise
+ *_atoi - str to integer converter
+ *@y: string 2 converted
+ *Return: 0 if no numbers in string or converted number
  */
 
-int _atoi(char *s)
+int _atoi(char *y)
 {
-	int k, sign = 1, flag = 0, out;
-	unsigned int r = 0;
+	int b, sign = 1, flag = 0, out;
+	unsigned int t = 0;
 
-	for (k = 0;  s[k] != '\0' && flag != 2; k++)
+	for (y = 0;  y[b] != '\0' && flag != 2; b++)
 	{
-		if (s[k] == '-')
+		if (y[b] == '-')
 			sign *= -1;
 
-		if (s[k] >= '0' && s[k] <= '9')
+		if (y[b] >= '0' && y[b] <= '9')
 		{
 			flag = 1;
-			r *= 10;
-			r += (s[k] - '0');
+			t *= 10;
+			t += (y[b] - '0');
 		}
 		else if (flag == 1)
 			flag = 2;
 	}
 
 	if (sign == -1)
-		out = -r;
+		out = -t;
 	else
-		out = r;
+		out = t;
 
 	return (out);
 }
