@@ -1,6 +1,7 @@
 #include "shell.h"
 
 /**
+<<<<<<< HEAD
 * main - the entry point
 * @argc: argument count
 * @argv: argument vector
@@ -8,6 +9,15 @@
 * Return: 0 on success, 1 on error
 */
 int main(int argc, char **argv)
+=======
+ * main - entry point
+ * @ac: count of argument
+ * @av: vector of argument
+ *
+ * Return:  1 on error 0 on success
+ */
+int main(int ac, char **av)
+>>>>>>> 54350c2788c098abd28af1b50af1695d30af1197
 {
 info_t info[] = { INFO_INIT };
 int file_descriptor = 2;

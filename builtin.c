@@ -1,10 +1,10 @@
 #include "shell.h"
 
 /**
- * _myexit - exits the shell
- * @info: the Structure containing potential arguments. Used to maintain
+ * _myexit - shell exit
+ * @info: struct with potential arguments to maintain
  *          a constant function prototype.
- *  Return: exits with a given exit status
+ *  Return: exits give satuss
  *         (0) if info.argv[0] != "exit"
  */
 int _myexit(info_t *info)
@@ -30,24 +30,24 @@ int _myexit(info_t *info)
 }
 
 /**
- * _mycd - changes the current directory of the process
- * @info: the Structure containing potential arguments. Used to maintain
+ * _mycd - changes process cd
+ * @info: struct with potential arguments to maintain
  *          a constant function prototype.
  *  Return: 0
  */
 int _mycd(info_t *info)
 {
-	char *o, *dir, buffer[1024];
+	char *b, *dir, buffer[1024];
 	int chdir_ret;
 
-	o = getcwd(buffer, 1024);
-	if (!o)
+	b = getcwd(buffer, 1024);
+	if (!b)
 		_puts("TODO: >>getcwd failure emsg here<<\n");
 	if (!info->argv[1])
 	{
 		dir = _getenv(info, "HOME=");
 		if (!dir)
-			chdir_ret = /* TODO: what should this be? */
+			chdir_ret =
 				chdir((dir = _getenv(info, "PWD=")) ? dir : "/");
 		else
 			chdir_ret = chdir(dir);
@@ -56,12 +56,12 @@ int _mycd(info_t *info)
 	{
 		if (!_getenv(info, "OLDPWD="))
 		{
-			_puts(o);
+			_puts(b);
 			_putchar('\n');
 			return (1);
 		}
 		_puts(_getenv(info, "OLDPWD=")), _putchar('\n');
-		chdir_ret = /* TODO: what should this be? */
+		chdir_ret =
 			chdir((dir = _getenv(info, "OLDPWD=")) ? dir : "/");
 	}
 	else
@@ -80,8 +80,8 @@ int _mycd(info_t *info)
 }
 
 /**
- * _myhelp - changes the current directory of the process
- * @info: the Structure containing potential arguments. Used to maintain
+ * _myhelp - changes process cd
+ * @info: struct with potential arguments. Used to maintain
  *          a constant function prototype.
  *  Return: 0
  */
@@ -92,6 +92,6 @@ int _myhelp(info_t *info)
 	arg_array = info->argv;
 	_puts("help call works. Function not yet implemented \n");
 	if (0)
-		_puts(*arg_array); /* temp att_unused workaround */
+		_puts(*arg_array);
 	return (0);
 }

@@ -1,85 +1,85 @@
 #include "shell.h"
 
 /**
- *_eputs - printing an input string
- * @str: a string to be printed
+ *_eputs - prints an input string
+ * @str: str to be printed
  *
  * Return: Nothing
  */
 void _eputs(char *str)
 {
-	int k = 0;
+	int m = 0;
 
 	if (!str)
 		return;
-	while (str[k] != '\0')
+	while (str[m] != '\0')
 	{
-		_eputchar(str[k]);
-		k++;
+		_eputchar(str[m]);
+		m++;
 	}
 }
 
 /**
- * _eputchar - writes the character c to stderr
- * @c:  character to print
+ * _eputchar - char c to stderr writer
+ * @r:  char 2 print
  *
- * Return: On success 1.
- * On error, -1 is returned, and errno is set appropriately.
+ * Return: 1 on success,
+ * on error -1 , and errno is set appropriately.
  */
-int _eputchar(char c)
+int _eputchar(char r)
 {
-	static int k;
+	static int m;
 	static char buf[WRITE_BUF_SIZE];
 
-	if (c == BUF_FLUSH || k >= WRITE_BUF_SIZE)
+	if (r == BUF_FLUSH || m >= WRITE_BUF_SIZE)
 	{
-		write(2, buf, k);
-		k = 0;
+		write(2, buf, m);
+		m = 0;
 	}
-	if (c != BUF_FLUSH)
-		buf[k++] = c;
+	if (r != BUF_FLUSH)
+		buf[m++] = r;
 	return (1);
 }
 
 /**
- * _putfd - writes the character c to given fd
- * @c:  character to print
- * @fd:  filedescriptor to write to
+ * _putfd - writes char c to fd
+ * @r:  char 2 print
+ * @fd:  file descriptor to write
  *
- * Return: On success 1.
- * On error, -1 is returned, and errno is set appropriately.
+ * Return: 1 on success .
+ * on error -1 , and errno is set appropriately.
  */
-int _putfd(char c, int fd)
+int _putfd(char r, int fd)
 {
-	static int k;
+	static int m;
 	static char buf[WRITE_BUF_SIZE];
 
-	if (c == BUF_FLUSH || k >= WRITE_BUF_SIZE)
+	if (r == BUF_FLUSH || m >= WRITE_BUF_SIZE)
 	{
-		write(fd, buf, k);
-		k = 0;
+		write(fd, buf, m);
+		m = 0;
 	}
-	if (c != BUF_FLUSH)
-		buf[k++] = c;
+	if (r != BUF_FLUSH)
+		buf[m++] = r;
 	return (1);
 }
 
 /**
- *_putsfd - prints an input string
- * @str: string to be printed
- * @fd:  filedescriptor to write to
+ *_putsfd - print to str input
+ * @str: str to print
+ * @fd:  file descriptor to write
  *
- * Return:  number of chars put
+ * Return:  no of put chars
  */
 int _putsfd(char *str, int fd)
 {
-	int k = 0;
+	int m = 0;
 
 	if (!str)
 		return (0);
 	while (*str)
 	{
-		k += _putfd(*str++, fd);
+		m += _putfd(*str++, fd);
 	}
-	return (k);
+	return (m);
 }
