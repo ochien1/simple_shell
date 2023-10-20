@@ -1,61 +1,61 @@
 #include "shell.h"
 
 /**
- * is_chain - validates a char in buffer is a chain delimiter
- * @info: the parameter struct
- * @buffer: the char buffer
- * @position: address of current position in buffer
+ * is_chain - validates char in buffer is  chain
+ * @info: struct para
+ * @buffer: buffer
+ * @pos: address in buffer
  *
- * Return: 1 if chain delimiter, 0 otherwise
+ * Return: 0 or 1 if chain delimiter
  */
-int is_chain(info_t *info, char *buffer, size_t *position)
+int is_chain(info_t *info, char *buffer, size_t *pos)
 {
-	size_t j = *position;
+	size_t w = *pos;
 
-	if (buffer[j] == '|' && buffer[j + 1] == '|')
+	if (buffer[w] == '|' && buffer[w + 1] == '|')
 	{
-		buffer[j] = 0;
-		j++;
+		buffer[w] = 0;
+		w++;
 		info->cmd_buf_type = CMD_OR;
 	}
-	else if (buffer[j] == '&' && buffer[j + 1] == '&')
+	else if (buffer[w] == '&' && buffer[w + 1] == '&')
 	{
-		buffer[j] = 0;
-		j++;
+		buffer[w] = 0;
+		w++;
 		info->cmd_buf_type = CMD_AND;
 	}
-	else if (buffer[j] == ';') /* found end of this command */
+	else if (buffer[w] == ';')
 	{
-		buffer[j] = 0; /* replace semicolon with null */
+		buffer[w] = 0;
 		info->cmd_buf_type = CMD_CHAIN;
 	}
 	else
 		return (0);
-	*position = j;
+	*pos = w;
 	return (1);
 }
 
 /**
- * check_chain - determines if chaining should continue chaining
- * @info: the parameter struct
- * @buffer: the char buffer
- * @position: address of current position in buffer
- * @start: starting position in buffer
- * @length: length of buffer
+ * check_chain - if chain should continue
+ * @info: struct para
+ * @buffer: buffer char
+ * @pos: add in buffer
+ * @start: starting position 
+ * @length: length buffer
  *
- * Return: Void
+ * Return: Zero
  */
-void check_chain(info_t *info, char *buffer, size_t *position,
+void check_chain(info_t *info, char *buffer, size_t *pos,
 		size_t start, size_t length)
 {
-	size_t j = *position;
+	size_t w = *pos;
 
 	if (info->cmd_buf_type == CMD_AND)
 	{
 		if (info->status)
 		{
 			buffer[start] = 0;
-			j = length;
+			w = length;
 		}
 	}
 	if (info->cmd_buf_type == CMD_OR)
@@ -63,26 +63,25 @@ void check_chain(info_t *info, char *buffer, size_t *position,
 		if (!info->status)
 		{
 			buffer[start] = 0;
-			j = length;
+			w = length;
 		}
 	}
 
-	*position = j;
+	*pos = w;
 }
 
 /**
- * replace_alias - restores an incognito in the tokenized string
- * @info: the parameter struct
- *
- * Return: 1 if replaced, 0 otherwise
+ * replace_alias - incognito restorer to tokenised
+ * @info: str parameter
+ * Return: 0 or 1 if replaced
  */
 int replace_alias(info_t *info)
 {
-	int i;
+	int z;
 	list_t *node;
 	char *p;
 
-	for (i = 0; i < 10; i++)
+	for (z = 0; z < 10; z++)
 	{
 		node = node_starts_with(info->alias, info->argv[0], '=');
 		if (!node)
@@ -100,51 +99,51 @@ int replace_alias(info_t *info)
 }
 
 /**
- * replace_vars - restores vars in the tokenized string
- * @info: the parameter struct
+ * replace_vars - variables in tokenised str
+ * @info: struct para
  *
- * Return: 1 if replaced, 0 otherwise
+ * Return: 0 or 1 if replaced
  */
 int replace_vars(info_t *info)
 {
-	int i = 0;
+	int z = 0;
 	list_t *node;
 
-	for (i = 0; info->argv[i]; i++)
+	for (z = 0; info->argv[z]; z++)
 	{
-		if (info->argv[i][0] != '$' || !info->argv[i][1])
+		if (info->argv[z][0] != '$' || !info->argv[z][1])
 			continue;
 
-		if (!_strcmp(info->argv[i], "$?"))
+		if (!_strcmp(info->argv[z], "$?"))
 		{
-			replace_string(&(info->argv[i]),
+			replace_string(&(info->argv[z]),
 						   _strdup(convert_number(info->status, 10, 0)));
 			continue;
 		}
-		if (!_strcmp(info->argv[i], "$$"))
+		if (!_strcmp(info->argv[z], "$$"))
 		{
-			replace_string(&(info->argv[i]),
+			replace_string(&(info->argv[z]),
 						   _strdup(convert_number(getpid(), 10, 0)));
 			continue;
 		}
-		node = node_starts_with(info->env, &info->argv[i][1], '=');
+		node = node_starts_with(info->env, &info->argv[z][1], '=');
 		if (node)
 		{
-			replace_string(&(info->argv[i]),
+			replace_string(&(info->argv[z]),
 						   _strdup(_strchr(node->str, '=') + 1));
 			continue;
 		}
-		replace_string(&info->argv[i], _strdup(""));
+		replace_string(&info->argv[z], _strdup(""));
 	}
 	return (0);
 }
 
 /**
- * replace_string - restores string
- * @old: source string
- * @new: destination string
+ * replace_string - string restore
+ * @old: starring source
+ * @new: string desttination
  *
- * Return: 1 if replaced, 0 otherwise
+ * Return: 0 or 1 if replaced
  */
 int replace_string(char **old, char *new)
 {

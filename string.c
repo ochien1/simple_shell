@@ -1,76 +1,75 @@
 #include "shell.h"
 
 /**
-* _strlen_custom - returns the length of a string
-* @str: the string whose length is to be measured
-*
-* Return: integer length of string
-*/
-int _strlen_custom(char *str)
+ * _strlen - length of a string
+ * @w: str too measure
+ *
+ * Return: integer len of str
+ */
+int _strlen(char *w)
 {
-int length = 0;
+	int k = 0;
 
-if (!str)
-return (0);
+	if (!w)
+		return (0);
 
-while (*str++)
-length++;
-return (length);
+	while (*w++)
+		k++;
+	return (k);
 }
 
 /**
-* _strcmp_custom - compares two strings lexicographically
-* @str1: first string to compare
-* @str2: second string to compare
-*
-* Return: negative if str1 < str2,
-* positive if str1 > str2, zero if str1 == str2
-*/
-int _strcmp_custom(char *str1, char *str2)
+ * _strcmp - compares two strings lexicographically
+ * @sr1: start point
+ * @sr2: ending point
+ *
+ * Return: negative if s1 les sr2, positive if sr1 greater sr2, zero if sr1 equals sr2
+ */
+int _strcmp(char *sr1, char *sr2)
 {
-while (*str1 && *str2)
-{
-if (*str1 != *str2)
-return (*str1 - *str2);
-str1++;
-str2++;
-}
-if (*str1 == *str2)
-return (0);
-else
-return (*str1 < *str2 ? -1 : 1);
-}
-
-/**
-* starts_with_custom - finds the substring needle that starts with haystack
-* @haystack: string to be searched
-* @needle: the substring to be found
-*
-* Return: address of next character of haystack or NULL if not found
-*/
-char *starts_with_custom(const char *haystack, const char *needle)
-{
-while (*needle)
-if (*needle++ != *haystack++)
-return (NULL);
-return ((char *)haystack);
+	while (*sr1 && *sr2)
+	{
+		if (*sr1 != *sr2)
+			return (*sr1 - *sr2);
+		sr1++;
+		sr2++;
+	}
+	if (*sr1 == *sr2)
+		return (0);
+	else
+		return (*sr1 < *sr2 ? -1 : 1);
 }
 
 /**
-* _strcat_custom - concatenates two strings
-* @dest: the destination buffer
-* @src: the source buffer
-*
-* Return: pointer to destination buffer
-*/
-char *_strcat_custom(char *dest, char *src)
+ * starts_with - finds needle in haystack
+ * @haystack: str to search
+ * @needle: substring to find
+ *
+ * Return: next char address or null
+ */
+char *starts_with(const char *haystack, const char *needle)
 {
-char *result = dest;
+	while (*needle)
+		if (*needle++ != *haystack++)
+			return (NULL);
+	return ((char *)haystack);
+}
 
-while (*dest)
-dest++;
-while (*src)
-*dest++ = *src++;
-*dest = *src;
-return (result);
+/**
+ * _strcat - two strings link
+ * @dest: buffer destination
+ * @src: buffer source
+ *
+ * Return: destination buffer pointer
+ */
+char *_strcat(char *dest, char *src)
+{
+	char *ret = dest;
+
+	while (*dest)
+		dest++;
+	while (*src)
+		*dest++ = *src++;
+	*dest = *src;
+	return (ret);
 }

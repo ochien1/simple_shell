@@ -1,29 +1,29 @@
 #include "shell.h"
 
 /**
- * hsh - the main shell loop
- * @info: the parameter & return info struct
- * @arguments: the argument vector from main()
+ * hsh - shell loop main
+ * @info: parameter and return
+ * @av: argv from main
  *
- * Return: 0 on success, 1 on error, or error code
+ * Return:  error or 0 on successa and 1 on error,
  */
-int hsh(info_t *info, char **arguments)
+int hsh(info_t *info, char **av)
 {
-	ssize_t input_result = 0;
-	int builtin_result = 0;
+	ssize_t s = 0;
+	int builtin_ret = 0;
 
-	while (input_result != -1 && builtin_result != -2)
+	while (s != -1 && builtin_ret != -2)
 	{
 		clear_info(info);
 		if (interactive(info))
 			_puts("$ ");
 		_eputchar(BUF_FLUSH);
-		input_result = get_input(info);
-		if (input_result != -1)
+		s = get_input(info);
+		if (s != -1)
 		{
-			set_info(info, arguments);
-			builtin_result = find_builtin(info);
-			if (builtin_result == -1)
+			set_info(info, av);
+			builtin_ret = find_builtin(info);
+			if (builtin_ret == -1)
 				find_cmd(info);
 		}
 		else if (interactive(info))
@@ -34,27 +34,26 @@ int hsh(info_t *info, char **arguments)
 	free_info(info, 1);
 	if (!interactive(info) && info->status)
 		exit(info->status);
-	if (builtin_result == -2)
+	if (builtin_ret == -2)
 	{
 		if (info->err_num == -1)
 			exit(info->status);
 		exit(info->err_num);
 	}
-	return (builtin_result);
+	return (builtin_ret);
 }
 
 /**
- * find_builtin - obtains a builtin command
- * @info: the parameter & return info struct
- *
- * Return: -1 if builtin not found,
+ * find_builtin - get builtin command
+ * @info: struct and info parameter
+ * Return: if builtin not found -1
  * 0 if builtin executed successfully,
- * 1 if builtin found but not successful,
- * 2 if builtin signals exit()
+ * foundnot successful,
+ * signals exit()
  */
 int find_builtin(info_t *info)
 {
-	int i, builtin_result = -1;
+	int k, built_in_ret = -1;
 	builtin_table builtintbl[] = {
 		{"exit", _myexit},
 		{"env", _myenv},
@@ -67,26 +66,26 @@ int find_builtin(info_t *info)
 		{NULL, NULL}
 	};
 
-	for (i = 0; builtintbl[i].type; i++)
-		if (_strcmp(info->argv[0], builtintbl[i].type) == 0)
+	for (k = 0; builtintbl[k].type; k++)
+		if (_strcmp(info->argv[0], builtintbl[k].type) == 0)
 		{
 			info->line_count++;
-			builtin_result = builtintbl[i].func(info);
+			built_in_ret = builtintbl[k].func(info);
 			break;
 		}
-	return (builtin_result);
+	return (built_in_ret);
 }
 
 /**
- * find_cmd - obtains a command in PATH
- * @info: the parameter & return info struct
+ * find_cmd - comd  PATH
+ * @info: the parameter and return info
  *
  * Return: void
  */
 void find_cmd(info_t *info)
 {
 	char *path = NULL;
-	int i, count_non_delim;
+	int k, m;
 
 	info->path = info->argv[0];
 	if (info->linecount_flag == 1)
@@ -94,10 +93,10 @@ void find_cmd(info_t *info)
 		info->line_count++;
 		info->linecount_flag = 0;
 	}
-	for (i = 0, count_non_delim = 0; info->arg[i]; i++)
-		if (!is_delim(info->arg[i], " \t\n"))
-			count_non_delim++;
-	if (!count_non_delim)
+	for (k = 0, m = 0; info->arg[k]; k++)
+		if (!is_delim(info->arg[k], " \t\n"))
+			m++;
+	if (!m)
 		return;
 
 	path = find_path(info, _getenv(info, "PATH="), info->argv[0]);
@@ -108,8 +107,8 @@ void find_cmd(info_t *info)
 	}
 	else
 	{
-		if ((interactive(info) || _getenv(info, "PATH=") || info->argv[0][0] == '/')
-				&& is_cmd(info, info->argv[0]))
+		if ((interactive(info) || _getenv(info, "PATH=")
+					|| info->argv[0][0] == '/') && is_cmd(info, info->argv[0]))
 			fork_cmd(info);
 		else if (*(info->arg) != '\n')
 		{
@@ -120,8 +119,8 @@ void find_cmd(info_t *info)
 }
 
 /**
- * fork_cmd - it forks an exec thread and run cmd
- * @info: the parameter & return info struct
+ * fork_cmd - exec thread forkand run
+ * @info: par and return info struck
  *
  * Return: void
  */
@@ -132,7 +131,6 @@ void fork_cmd(info_t *info)
 	child_pid = fork();
 	if (child_pid == -1)
 	{
-		/* TODO: PUT ERROR FUNCTION */
 		perror("Error:");
 		return;
 	}
@@ -145,7 +143,6 @@ void fork_cmd(info_t *info)
 				exit(126);
 			exit(1);
 		}
-		/* TODO: PUT ERROR FUNCTION */
 	}
 	else
 	{

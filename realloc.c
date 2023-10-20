@@ -1,46 +1,47 @@
 #include "shell.h"
 
 /**
- * _memset_custom - sets the block memory to a specified value
- * @s: the memory pointer
- * @b: the byte to set *s with
- * @n: the amount of bytes to be set
- * Return: (s) memory area s's pointer
+ * _memset - memory block to specific value
+ * @m: pointer to memory
+ * @q: byte to set
+ * @b: byte amount
+ * Return: memory s pointter
  */
-char *_memset_custom(char *s, char b, unsigned int n)
+char *_memset(char *m, char q, unsigned int b)
 {
-	unsigned int i;
+	unsigned int k;
 
-	for (i = 0; i < n; i++)
-		s[i] = b;
-	return (s);
+	for (k = 0; k < b; k++)
+		m[k] = q;
+	return (m);
 }
 
 /**
- * ffree_custom - makes memory a string of reusable
- * @pp: string of strings
+ * ffree - string of memory reusable
+ * @ff: strings str
  */
-void ffree_custom(char **pp)
+void ffree(char **ff)
 {
-	char **a = pp;
+	char **w = ff;
 
-	if (!pp)
+	if (!ff)
 		return;
-	while (*pp)
-		free(*pp++);
-	free(a);
+	while (*ff)
+		free(*ff++);
+	free(w);
 }
 
 /**
- * _realloc_custom - resizes a block of memory
- * @ptr: pointer to previous malloc'ated memory
- * @old_size: byte size of previous block
- * @new_size: byte size of new block
- * Return: pointer to the old block nameen.
+ * _realloc - block of memory resize
+ * @ptr: previous malloc pointter
+ * @old_size: previous block size
+ * @new_size: new block size
+ *
+ * Return: pointer to old block name
  */
-void *_realloc_custom(void *ptr, unsigned int old_size, unsigned int new_size)
+void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
 {
-	char *p;
+	char *a;
 
 	if (!ptr)
 		return (malloc(new_size));
@@ -49,13 +50,13 @@ void *_realloc_custom(void *ptr, unsigned int old_size, unsigned int new_size)
 	if (new_size == old_size)
 		return (ptr);
 
-	p = malloc(new_size);
-	if (!p)
+	a = malloc(new_size);
+	if (!a)
 		return (NULL);
 
 	old_size = old_size < new_size ? old_size : new_size;
 	while (old_size--)
-		p[old_size] = ((char *)ptr)[old_size];
+		a[old_size] = ((char *)ptr)[old_size];
 	free(ptr);
-	return (p);
+	return (a);
 }
