@@ -40,7 +40,7 @@ int is_chain(info_t *info, char *buffer, size_t *pos)
  * @info: struct para
  * @buffer: buffer char
  * @pos: add in buffer
- * @start: starting position 
+ * @start: starting position
  * @length: length buffer
  *
  * Return: Zero

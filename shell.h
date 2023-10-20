@@ -52,7 +52,7 @@ typedef struct liststr
 
 /**
  *struct passinfo -  pseudo to pass into a function,
- *		allowing uniform prototype for function pointer 
+ *		allowing uniform prototype for function pointer
  *@arg: generated  getline strcontaining argu
  *@argv: array of strings from arg
  *@path: the current command

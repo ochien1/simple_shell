@@ -22,8 +22,9 @@ int _strlen(char *w)
  * _strcmp - compares two strings lexicographically
  * @sr1: start point
  * @sr2: ending point
- *
- * Return: negative if s1 les sr2, positive if sr1 greater sr2, zero if sr1 equals sr2
+ * Return: negative if s1 les sr2, positive if sr1
+ * greater sr2, zero if sr1 equals sr2
+ * _strcmp: buffer
  */
 int _strcmp(char *sr1, char *sr2)
 {
